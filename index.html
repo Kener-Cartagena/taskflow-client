@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Gestor de Tareas</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Auth Section -->
+        <div id="auth-section" class="auth-container">
+            <div class="auth-box">
+                <div class="auth-header">
+                    <i class="fas fa-check-double"></i>
+                    <h1>TaskFlow</h1>
+                    <p>Gestiona tus tareas de forma eficiente</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="showTab('login')">Iniciar Sesión</button>
+                    <button class="tab-btn" onclick="showTab('register')">Registrarse</button>
+                </div>
+
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Usuario</label>
+                        <input type="text" id="login-username" required placeholder="Tu usuario">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Contraseña</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                </form>
+
+                <form id="register-form" class="auth-form hidden">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Usuario</label>
+                        <input type="text" id="reg-username" required placeholder="Elige un usuario">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="reg-email" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Contraseña</label>
+                        <input type="password" id="reg-password" required placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Confirmar Contraseña</label>
+                        <input type="password" id="reg-password2" required placeholder="Repite la contraseña">
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-user-plus"></i> Crear Cuenta
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main App Section -->
+        <div id="app-section" class="hidden">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-check-double"></i>
+                    <span>TaskFlow</span>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" onclick="filterTasks('all')">
+                        <i class="fas fa-inbox"></i>
+                        <span>Todas</span>
+                        <span class="badge" id="count-all">0</span>
+                    </button>
+                    <button class="nav-item" onclick="filterTasks('today')">
+                        <i class="fas fa-calendar-day"></i>
+                        <span>Hoy</span>
+                        <span class="badge" id="count-today">0</span>
+                    </button>
+                    <button class="nav-item" onclick="filterTasks('pending')">
+                        <i class="fas fa-clock"></i>
+                        <span>Pendientes</span>
+                        <span class="badge" id="count-pending">0</span>
+                    </button>
+                    <button class="nav-item" onclick="filterTasks('completed')">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Completadas</span>
+                    </button>
+                    <button class="nav-item" onclick="filterTasks('overdue')">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Vencidas</span>
+                        <span class="badge badge-danger" id="count-overdue">0</span>
+                    </button>
+                </nav>
+
+                <div class="sidebar-section">
+                    <h3>Categorías</h3>
+                    <div id="categories-list" class="categories-list">
+                        <!-- Categories loaded dynamically -->
+                    </div>
+                    <button class="btn-add-category" onclick="showCategoryModal()">
+                        <i class="fas fa-plus"></i> Nueva Categoría
+                    </button>
+                </div>
+
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="username-display">Usuario</span>
+                    </div>
+                    <button onclick="logout()" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <header class="main-header">
+                    <div class="header-title">
+                        <h2 id="page-title">Todas las Tareas</h2>
+                        <p id="page-subtitle">Gestiona tu día a día</p>
+                    </div>
+                    <button class="btn-new-task" onclick="showTaskModal()">
+                        <i class="fas fa-plus"></i> Nueva Tarea
+                    </button>
+                </header>
+
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fas fa-tasks"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-total">0</span>
+                            <span class="stat-label">Total</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon yellow"><i class="fas fa-clock"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-pending">0</span>
+                            <span class="stat-label">Pendientes</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="fas fa-check"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-completed">0</span>
+                            <span class="stat-label">Completadas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="fas fa-exclamation"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="stat-overdue">0</span>
+                            <span class="stat-label">Vencidas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Buscar tareas..." oninput="searchTasks(this.value)">
+                    </div>
+                    <select id="priority-filter" onchange="applyFilters()">
+                        <option value="">Todas las prioridades</option>
+                        <option value="high">Alta</option>
+                        <option value="medium">Media</option>
+                        <option value="low">Baja</option>
+                    </select>
+                    <select id="sort-by" onchange="applyFilters()">
+                        <option value="-created_at">Más recientes</option>
+                        <option value="due_date">Fecha límite</option>
+                        <option value="priority">Prioridad</option>
+                    </select>
+                </div>
+
+                <!-- Tasks List -->
+                <div id="tasks-container" class="tasks-container">
+                    <!-- Tasks loaded dynamically -->
+                </div>
+            </main>
+        </div>
+
+        <!-- Task Modal -->
+        <div id="task-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modal-title">Nueva Tarea</h3>
+                    <button class="btn-close" onclick="closeTaskModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <form id="task-form" onsubmit="saveTask(event)">
+                    <input type="hidden" id="task-id">
+                    <div class="form-group">
+                        <label>Título *</label>
+                        <input type="text" id="task-title" required placeholder="¿Qué necesitas hacer?">
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea id="task-description" rows="3" placeholder="Añade detalles..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Categoría</label>
+                            <select id="task-category">
+                                <option value="">Sin categoría</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Prioridad</label>
+                            <select id="task-priority">
+                                <option value="low">Baja</option>
+                                <option value="medium" selected>Media</option>
+                                <option value="high">Alta</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha límite</label>
+                        <input type="datetime-local" id="task-due-date">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeTaskModal()">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar Tarea</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Category Modal -->
+        <div id="category-modal" class="modal hidden">
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h3>Nueva Categoría</h3>
+                    <button class="btn-close" onclick="closeCategoryModal()"><i class="fas fa-times"></i></button>
+                </div>
+                <form id="category-form" onsubmit="saveCategory(event)">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="category-name" required placeholder="Ej: Trabajo, Personal...">
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <div class="color-picker">
+                            <input type="color" id="category-color" value="#3B82F6">
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeCategoryModal()">Cancelar</button>
+                        <button type="submit" class="btn-primary">Crear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
