@@ -57,7 +57,7 @@ class API {
         if (!refresh) return false;
 
         try {
-            const response = await fetch(`${API_URL}/token/refresh/`, {
+            const response = await fetch(`${API_URL}/api/token/refresh/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ refresh })
@@ -79,77 +79,77 @@ class API {
 
     // Auth
     static login(credentials) {
-        return this.request('/token/', {
+        return this.request('api/token/', {
             method: 'POST',
             body: credentials
         });
     }
 
     static register(data) {
-        return this.request('/register/', {
+        return this.request('api//register/', {
             method: 'POST',
             body: data
         });
     }
 
     static getProfile() {
-        return this.request('/profile/');
+        return this.request('api/profile/');
     }
 
     // Tasks
     static getTasks(params = {}) {
         const queryString = new URLSearchParams(params).toString();
-        return this.request(`/tasks/?${queryString}`);
+        return this.request(`api/tasks/?${queryString}`);
     }
 
     static getTask(id) {
-        return this.request(`/tasks/${id}/`);
+        return this.request(`api/tasks/${id}/`);
     }
 
     static createTask(data) {
-        return this.request('/tasks/', {
+        return this.request('api/tasks/', {
             method: 'POST',
             body: data
         });
     }
 
     static updateTask(id, data) {
-        return this.request(`/tasks/${id}/`, {
+        return this.request(`api/tasks/${id}/`, {
             method: 'PUT',
             body: data
         });
     }
 
     static deleteTask(id) {
-        return this.request(`/tasks/${id}/`, {
+        return this.request(`api/tasks/${id}/`, {
             method: 'DELETE'
         });
     }
 
     static toggleTaskStatus(id) {
-        return this.request(`/tasks/${id}/toggle_status/`, {
+        return this.request(`api/tasks/${id}/toggle_status/`, {
             method: 'POST'
         });
     }
 
     static getStatistics() {
-        return this.request('/tasks/statistics/');
+        return this.request('api/tasks/statistics/');
     }
 
     // Categories
     static getCategories() {
-        return this.request('/categories/');
+        return this.request('api/categories/');
     }
 
     static createCategory(data) {
-        return this.request('/categories/', {
+        return this.request('api/categories/', {
             method: 'POST',
             body: data
         });
     }
 
     static async deleteCategory(id) {
-        return this.request(`/categories/${id}/`, { method: 'DELETE' });
+        return this.request(`api/categories/${id}/`, { method: 'DELETE' });
     }
 
 }
