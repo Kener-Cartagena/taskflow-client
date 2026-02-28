@@ -1,5 +1,5 @@
 const API_URL_LOCAL = 'http://localhost:8000/api';
-const API_URL = 'https://taskflow-backend-9n9s.onrender.com/';
+const API_URL = 'https://taskflow-backend-9n9s.onrender.com';
 
 class API {
     static async request(endpoint, options = {}) {
@@ -57,7 +57,7 @@ class API {
         if (!refresh) return false;
 
         try {
-            const response = await fetch(`${API_URL}/api/token/refresh/`, {
+            const response = await fetch(`${API_URL}api/token/refresh/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ refresh })
