@@ -57,7 +57,7 @@ class API {
         if (!refresh) return false;
 
         try {
-            const response = await fetch(`${API_URL}api/token/refresh/`, {
+            const response = await fetch(`${API_URL}/api/token/refresh/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ refresh })
@@ -79,14 +79,14 @@ class API {
 
     // Auth
     static login(credentials) {
-        return this.request('api/token/', {
+        return this.request('/api/token/', {
             method: 'POST',
             body: credentials
         });
     }
 
     static register(data) {
-        return this.request('api/register/', {
+        return this.request('/api/register/', {
             method: 'POST',
             body: data
         });
