@@ -102,7 +102,6 @@ function renderCategories() {
             <div class="category-color" style="background: ${cat.color}"></div>
             <span>${escapeHtml(cat.name)}</span>
             <span class="category-count">${cat.task_count}</span>
-            <button onclick="editCategory(event, ${cat.id})">✏️</button>
             <button onclick="deleteCategory(event, ${cat.id})">🗑️</button>
         </div>
     `).join('');
@@ -369,3 +368,46 @@ window.onclick = function(event) {
         event.target.classList.add('hidden');
     }
 }
+
+
+// ============================================
+// SIDEBAR TOGGLE - Menú hamburguesa
+// ============================================
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('active');
+    
+    // Cambiar icono del botón
+    const toggleBtn = document.getElementById('menuToggle');
+    const icon = toggleBtn.querySelector('i');
+    
+    if (sidebar.classList.contains('open')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times'); // X para cerrar
+    } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars'); // Barras para abrir
+    }
+}
+
+// Cerrar sidebar al cambiar de tamaño a desktop
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        const sidebar = document.getElementById('id');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        
+        // Reset icono
+        const toggleBtn = document.getElementById('menuToggle');
+        if (toggleBtn) {
+            const icon = toggleBtn.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    }
+});
